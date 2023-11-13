@@ -1,5 +1,24 @@
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using NoteKeeper.Aplicacao.ModuloCategoria;
+using NoteKeeper.Dominio.Compartilhado;
+using NoteKeeper.Dominio.ModuloCategoria;
+using NoteKeeper.Infra.Orm.Compartilhado;
+using NoteKeeper.Infra.Orm.ModuloCategoria;
+using NoteKeeper.Infra.Orm.ModuloNota;
+using NoteKeeper.WebApi.ViewModels;
+
 namespace NoteKeeper.WebApi
 {
+
+    public class CategoriaProfile : Profile
+    {
+        public CategoriaProfile()
+        {
+            CreateMap<Categoria, ListarCategoriaViewModel>();
+        }
+    }
+
     public class Program
     {
         public static void Main(string[] args)
@@ -9,6 +28,21 @@ namespace NoteKeeper.WebApi
             // Add services to the container.
 
             builder.Services.AddControllers();
+
+            var connectionString = builder.Configuration.GetConnectionString("SqlServer");
+
+            builder.Services.AddDbContext<IContextoPersistencia, NoteKeeperDbContext>(optionsBuilder =>
+            {
+                optionsBuilder.UseSqlServer(connectionString);
+            });
+
+            builder.Services.AddTransient<IRepositorioCategoria, RepositorioCategoriaOrm>();
+            builder.Services.AddTransient<ServicoCategoria>();
+
+            builder.Services.AddAutoMapper(config => {
+                config.AddProfile<CategoriaProfile>();
+            });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

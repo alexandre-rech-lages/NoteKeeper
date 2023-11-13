@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NoteKeeper.Aplicacao\NoteKeeper.Aplicacao.csproj" />
     <ProjectReference Include="..\NoteKeeper.Dominio\NoteKeeper.Dominio.csproj" />
     <ProjectReference Include="..\NoteKeeper.Infra.Orm\NoteKeeper.Infra.Orm.csproj" />
   </ItemGroup>

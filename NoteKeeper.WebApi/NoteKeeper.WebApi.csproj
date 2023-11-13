@@ -17,10 +17,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NoteKeeper.Aplicacao\NoteKeeper.Aplicacao.csproj" />
     <ProjectReference Include="..\NoteKeeper.Infra.Orm\NoteKeeper.Infra.Orm.csproj" />
   </ItemGroup>
 

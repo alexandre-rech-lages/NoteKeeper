@@ -8,9 +8,9 @@ namespace NoteKeeper.Infra.Orm.Compartilhado
         protected NoteKeeperDbContext dbContext;
         protected DbSet<TEntidade> registros;
 
-        public RepositorioBase(NoteKeeperDbContext dbContext)
+        public RepositorioBase(IContextoPersistencia ctx)
         {
-            this.dbContext = dbContext;
+            this.dbContext = (NoteKeeperDbContext)ctx;
             this.registros = dbContext.Set<TEntidade>();
         }
 
