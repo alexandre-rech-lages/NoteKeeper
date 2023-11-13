@@ -15,6 +15,8 @@ namespace NoteKeeper.Infra.Orm.ModuloCategoria
 
             builder.Property(x => x.Titulo)
                 .IsRequired();
+
+            builder.HasMany(x => x.Notas);
         }
     }
 }

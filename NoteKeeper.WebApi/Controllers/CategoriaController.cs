@@ -19,11 +19,21 @@ namespace NoteKeeper.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> SelecionarTodos()
         {
-            var categorias = await servicoCategoria.SelecionarTodosAsync();
+            var categoriasResult = await servicoCategoria.SelecionarTodosAsync();
 
-            var viewModel = mapeador.Map<List<ListarCategoriaViewModel>>(categorias.Value);
+            var viewModel = mapeador.Map<List<ListarCategoriaViewModel>>(categoriasResult.Value);
+
+            return Ok(viewModel);
+        }
+
+        [HttpGet("visualiacao-completa/{id}")]
+        public async Task<IActionResult> SelecionarPorId(Guid id)
+        {
+            var categoriaResult = await servicoCategoria.SelecionarPorIdAsync(id);
+
+            var viewModel = mapeador.Map<VisualizarCategoriaViewModel>(categoriaResult.Value);
 
             return Ok(viewModel);
         }

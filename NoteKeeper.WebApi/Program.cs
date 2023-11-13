@@ -6,19 +6,13 @@ using NoteKeeper.Dominio.ModuloCategoria;
 using NoteKeeper.Infra.Orm.Compartilhado;
 using NoteKeeper.Infra.Orm.ModuloCategoria;
 using NoteKeeper.Infra.Orm.ModuloNota;
+using NoteKeeper.WebApi.Config.AutoMapperProfiles;
 using NoteKeeper.WebApi.ViewModels;
 
 namespace NoteKeeper.WebApi
 {
 
-    public class CategoriaProfile : Profile
-    {
-        public CategoriaProfile()
-        {
-            CreateMap<Categoria, ListarCategoriaViewModel>();
-        }
-    }
-
+    
     public class Program
     {
         public static void Main(string[] args)
@@ -39,8 +33,10 @@ namespace NoteKeeper.WebApi
             builder.Services.AddTransient<IRepositorioCategoria, RepositorioCategoriaOrm>();
             builder.Services.AddTransient<ServicoCategoria>();
 
-            builder.Services.AddAutoMapper(config => {
+            builder.Services.AddAutoMapper(config => 
+            {
                 config.AddProfile<CategoriaProfile>();
+                config.AddProfile<NotaProfile>();
             });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

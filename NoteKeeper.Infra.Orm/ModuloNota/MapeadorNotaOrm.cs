@@ -27,7 +27,7 @@ namespace NoteKeeper.Infra.Orm.ModuloNota
               .IsRequired();
 
             builder.HasOne(x => x.Categoria)
-                .WithMany()
+                .WithMany(x => x.Notas)
                 .HasForeignKey(x => x.CategoriaId)
                 .HasConstraintName("FK_TBCategoria_TBNota")
                 .OnDelete(DeleteBehavior.NoAction);
