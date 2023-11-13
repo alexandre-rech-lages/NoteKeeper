@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using NoteKeeper.Dominio.ModuloCategoria;
 using NoteKeeper.Dominio.ModuloNota;
 using NoteKeeper.Infra.Orm.Compartilhado;
+using NoteKeeper.Infra.Orm.ModuloCategoria;
+using NoteKeeper.Infra.Orm.ModuloNota;
 
 namespace NoteKepper.ConsoleApp
 {
@@ -26,7 +28,8 @@ namespace NoteKepper.ConsoleApp
 
             var dbContext = new NoteKeeperDbContext(optionsBuilder.Options);
 
-            dbContext.Categorias.Add(novaCategoria);
+            var repositorioCategoria = new RepositorioCategoriaOrm(dbContext);
+            repositorioCategoria.InserirAsync(novaCategoria);
 
             var novaNota = new Nota();
             novaNota.Titulo = "Comprar Cerveja";
@@ -35,7 +38,9 @@ namespace NoteKepper.ConsoleApp
             novaNota.Tema = TemaEnum.Realcada;
             novaNota.Categoria = novaCategoria;
 
-            dbContext.Notas.Add(novaNota);
+            var repositorioNota = new RepositorioNotaOrm(dbContext);
+
+            repositorioNota.InserirAsync(novaNota);
 
             dbContext.SaveChanges();
         }

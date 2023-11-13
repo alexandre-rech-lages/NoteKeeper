@@ -2,8 +2,7 @@
 
 namespace NoteKeeper.Dominio.ModuloCategoria
 {
-    public class Categoria : Entidade
+    public interface IRepositorioCategoria : IRepositorioBase<Categoria>
     {
-        public string Titulo { get; set; }
     }
 }

@@ -6,6 +6,6 @@ namespace NoteKeeper.WebApi.Controllers
     [ApiController]
     public class CategoriaController : ControllerBase
     {
-        
+
     }
 }
