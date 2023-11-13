@@ -8,7 +8,7 @@ namespace NoteKeeper.WebApi.Controllers
 {
     [Route("api/categorias")]
     [ApiController]
-    public class CategoriaController : ControllerBase
+    public class CategoriaController : ApiControllerBase
     {
         private readonly ServicoCategoria servicoCategoria;
         private readonly IMapper mapeador;
@@ -20,6 +20,9 @@ namespace NoteKeeper.WebApi.Controllers
         }
 
         [HttpGet]
+
+        [ProducesResponseType(typeof(List<ListarCategoriaViewModel>), 200)]
+        [ProducesResponseType(typeof(string[]), 500)]
         public async Task<IActionResult> SelecionarTodos()
         {
             var categoriasResult = await servicoCategoria.SelecionarTodosAsync();
@@ -30,9 +33,15 @@ namespace NoteKeeper.WebApi.Controllers
         }
 
         [HttpGet("visualiacao-completa/{id}")]
+        [ProducesResponseType(typeof(VisualizarCategoriaViewModel), 200)]
+        [ProducesResponseType(typeof(string[]), 404)]
+        [ProducesResponseType(typeof(string[]), 500)]
         public async Task<IActionResult> SelecionarPorId(Guid id)
         {
             var categoriaResult = await servicoCategoria.SelecionarPorIdAsync(id);
+
+            if (categoriaResult.IsFailed)
+                return NotFound(categoriaResult.Errors);
 
             var viewModel = mapeador.Map<VisualizarCategoriaViewModel>(categoriaResult.Value);
 
@@ -40,31 +49,54 @@ namespace NoteKeeper.WebApi.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(InserirCategoriaViewModel), 200)]
+        [ProducesResponseType(typeof(string[]), 400)]
+        [ProducesResponseType(typeof(string[]), 404)]
+        [ProducesResponseType(typeof(string[]), 500)]
         public async Task<IActionResult> Inserir(InserirCategoriaViewModel viewModel)
         {
             var categoria = mapeador.Map<Categoria>(viewModel);
 
-            await servicoCategoria.InserirAsync(categoria);
+            var categoriaResult = await servicoCategoria.InserirAsync(categoria);
+
+            if (categoriaResult.IsFailed)
+                return BadRequest(categoriaResult.Errors);
 
             return Ok(viewModel);
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(typeof(EditarCategoriaViewModel), 200)]
+        [ProducesResponseType(typeof(string[]), 400)]
+        [ProducesResponseType(typeof(string[]), 404)]
+        [ProducesResponseType(typeof(string[]), 500)]
         public async Task<IActionResult> Editar(Guid id, EditarCategoriaViewModel viewModel)
         {
-            var categoriaResult = await servicoCategoria.SelecionarPorIdAsync(id);
+            var selecacaoCategoriaResult = await servicoCategoria.SelecionarPorIdAsync(id);
 
-            var categoria = mapeador.Map(viewModel, categoriaResult.Value);
+            if (selecacaoCategoriaResult.IsFailed)
+                return NotFound(selecacaoCategoriaResult.Errors);
 
-            await servicoCategoria.EditarAsync(categoria);
+            var categoria = mapeador.Map(viewModel, selecacaoCategoriaResult.Value);
+
+            var categoriaResult =  await servicoCategoria.EditarAsync(categoria);
+
+            if (categoriaResult.IsFailed)
+                return BadRequest(categoriaResult.Errors);
 
             return Ok(viewModel);
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(string[]), 404)]
+        [ProducesResponseType(typeof(string[]), 500)]
         public async Task<IActionResult> Excluir(Guid id)
         {            
-            await servicoCategoria.ExcluirAsync(id);
+            var categoriaResult = await servicoCategoria.ExcluirAsync(id);
+
+            if (categoriaResult.IsFailed)
+                return NotFound(categoriaResult.Errors);
 
             return Ok();
         }

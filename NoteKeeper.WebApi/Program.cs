@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NoteKeeper.Aplicacao.ModuloCategoria;
 using NoteKeeper.Aplicacao.ModuloNota;
@@ -8,13 +9,12 @@ using NoteKeeper.Dominio.ModuloNota;
 using NoteKeeper.Infra.Orm.Compartilhado;
 using NoteKeeper.Infra.Orm.ModuloCategoria;
 using NoteKeeper.Infra.Orm.ModuloNota;
+using NoteKeeper.WebApi.Config;
 using NoteKeeper.WebApi.Config.AutoMapperProfiles;
 using NoteKeeper.WebApi.ViewModels;
 
 namespace NoteKeeper.WebApi
-{
-
-    
+{    
     public class Program
     {
         public static void Main(string[] args)
@@ -24,6 +24,11 @@ namespace NoteKeeper.WebApi
             // Add services to the container.
 
             builder.Services.AddControllers();
+
+            builder.Services.Configure<ApiBehaviorOptions>(config =>
+            {
+                config.SuppressModelStateInvalidFilter = true;
+            });
 
             var connectionString = builder.Configuration.GetConnectionString("SqlServer");
 
@@ -52,6 +57,8 @@ namespace NoteKeeper.WebApi
 
             var app = builder.Build();
 
+            app.UseMiddleware<ManipuladorExcecoes>();
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -62,7 +69,6 @@ namespace NoteKeeper.WebApi
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 

@@ -47,6 +47,9 @@ namespace NoteKeeper.Aplicacao.ModuloCategoria
         {
             var categoria = await repositorioCategoria.SelecionarPorIdAsync(id);
 
+            if (categoria == null)
+                return Result.Fail($"Categoria {id} não encontrada");
+
             repositorioCategoria.Excluir(categoria);
 
             await contextoPersistencia.GravarAsync();
