@@ -1,8 +1,10 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using NoteKeeper.Aplicacao.ModuloCategoria;
+using NoteKeeper.Aplicacao.ModuloNota;
 using NoteKeeper.Dominio.Compartilhado;
 using NoteKeeper.Dominio.ModuloCategoria;
+using NoteKeeper.Dominio.ModuloNota;
 using NoteKeeper.Infra.Orm.Compartilhado;
 using NoteKeeper.Infra.Orm.ModuloCategoria;
 using NoteKeeper.Infra.Orm.ModuloNota;
@@ -32,6 +34,11 @@ namespace NoteKeeper.WebApi
 
             builder.Services.AddTransient<IRepositorioCategoria, RepositorioCategoriaOrm>();
             builder.Services.AddTransient<ServicoCategoria>();
+
+            builder.Services.AddTransient<IRepositorioNota, RepositorioNotaOrm>();
+            builder.Services.AddTransient<ServicoNota>();
+
+            builder.Services.AddTransient<ConfigurarCategoriaMappingAction>();
 
             builder.Services.AddAutoMapper(config => 
             {

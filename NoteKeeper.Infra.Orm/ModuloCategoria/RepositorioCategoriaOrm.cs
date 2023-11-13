@@ -12,6 +12,10 @@ namespace NoteKeeper.Infra.Orm.ModuloCategoria
 
         }
 
+        public override Categoria SelecionarPorId(Guid id)
+        {
+            return registros.Include(x => x.Notas).SingleOrDefault(x => x.Id == id);
+        }
 
         public override async Task<Categoria> SelecionarPorIdAsync(Guid id)
         {
