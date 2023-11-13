@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NoteKeeper.Dominio.ModuloCategoria;
 using NoteKeeper.Dominio.ModuloNota;
+using NoteKeeper.Infra.Orm.ModuloCategoria;
+using NoteKeeper.Infra.Orm.ModuloNota;
 
 namespace NoteKeeper.Infra.Orm.Compartilhado
 {
@@ -16,43 +18,9 @@ namespace NoteKeeper.Infra.Orm.Compartilhado
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Categoria>(model =>
-            {
-                model.ToTable("TBCategoria");
+            modelBuilder.ApplyConfiguration(new MapeadorCategoriaOrm());
 
-                model.Property(x => x.Id)
-                    .ValueGeneratedNever();
-
-                model.Property(x => x.Titulo)
-                    .IsRequired();
-            });            
-
-            modelBuilder.Entity<Nota>(model =>
-            {
-                model.ToTable("TBNota");
-
-                model.Property(x => x.Id)
-                    .ValueGeneratedNever();
-
-                model.Property(x => x.Titulo)
-                    .IsRequired();
-
-                model.Property(x => x.Conteudo)
-                  .IsRequired();
-
-                model.Property(x => x.Tema)
-                    .HasConversion<int>()
-                  .IsRequired();
-
-                model.Property(x => x.Arquivada)                    
-                  .IsRequired();
-
-                model.HasOne(x => x.Categoria)
-                    .WithMany()
-                    .HasForeignKey(x => x.CategoriaId)
-                    .HasConstraintName("FK_TBCategoria_TBNota")
-                    .OnDelete(DeleteBehavior.NoAction);
-            });
+            modelBuilder.ApplyConfiguration(new MapeadorNotaOrm());
 
             base.OnModelCreating(modelBuilder);
         }

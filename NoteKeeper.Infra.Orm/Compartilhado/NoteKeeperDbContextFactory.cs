@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 
 namespace NoteKeeper.Infra.Orm.Compartilhado
 {
@@ -9,7 +10,14 @@ namespace NoteKeeper.Infra.Orm.Compartilhado
         {
             var optionsBuilder = new DbContextOptionsBuilder<NoteKeeperDbContext>();
 
-            optionsBuilder.UseSqlServer(@"Data Source=(LOCALDB)\MSSQLLOCALDB;Initial Catalog=NoteKeeper;Integrated Security=True");
+            IConfiguration configuracao = new ConfigurationBuilder()
+              .SetBasePath(Directory.GetCurrentDirectory())
+              .AddJsonFile("appsettings.json")
+              .Build();
+
+            var connectionString = configuracao.GetConnectionString("SqlServer");
+
+            optionsBuilder.UseSqlServer(connectionString);
 
             var dbContext = new NoteKeeperDbContext(optionsBuilder.Options);
 
