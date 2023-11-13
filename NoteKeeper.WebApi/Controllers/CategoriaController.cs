@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using NoteKeeper.Aplicacao.ModuloCategoria;
+using NoteKeeper.Dominio.ModuloCategoria;
 using NoteKeeper.WebApi.ViewModels;
 
 namespace NoteKeeper.WebApi.Controllers
@@ -37,5 +38,36 @@ namespace NoteKeeper.WebApi.Controllers
 
             return Ok(viewModel);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Inserir(InserirCategoriaViewModel viewModel)
+        {
+            var categoria = mapeador.Map<Categoria>(viewModel);
+
+            await servicoCategoria.InserirAsync(categoria);
+
+            return Ok(viewModel);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Editar(Guid id, EditarCategoriaViewModel viewModel)
+        {
+            var categoriaResult = await servicoCategoria.SelecionarPorIdAsync(id);
+
+            var categoria = mapeador.Map(viewModel, categoriaResult.Value);
+
+            await servicoCategoria.EditarAsync(categoria);
+
+            return Ok(viewModel);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Excluir(Guid id)
+        {            
+            await servicoCategoria.ExcluirAsync(id);
+
+            return Ok();
+        }
+
     }
 }

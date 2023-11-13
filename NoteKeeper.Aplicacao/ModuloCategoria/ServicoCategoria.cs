@@ -43,8 +43,10 @@ namespace NoteKeeper.Aplicacao.ModuloCategoria
             return Result.Ok(categoria);
         }
 
-        public async Task<Result> ExcluirAsync(Categoria categoria)
-        {           
+        public async Task<Result> ExcluirAsync(Guid id)
+        {
+            var categoria = await repositorioCategoria.SelecionarPorIdAsync(id);
+
             repositorioCategoria.Excluir(categoria);
 
             await contextoPersistencia.GravarAsync();

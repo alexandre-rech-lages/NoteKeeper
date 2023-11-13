@@ -10,7 +10,12 @@ namespace NoteKeeper.WebApi.Config.AutoMapperProfiles
         {
             CreateMap<Categoria, ListarCategoriaViewModel>();
             CreateMap<Categoria, VisualizarCategoriaViewModel>();
+
+            CreateMap<InserirCategoriaViewModel, Categoria>();
+            CreateMap<EditarCategoriaViewModel, Categoria>();
+
         }
     }
 
 }
+
